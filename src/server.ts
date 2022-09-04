@@ -42,11 +42,12 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
          let image_url:string = req.query.image_url;
          if(!image_url){
           res.status(404).send("image not found")
+         }else{
+          const filteredImage = await filterImageFromURL(image_url);
+          res.status(200).sendFile(filteredImage, ()=>{
+           deleteLocalFiles([filteredImage])
+          })
          }
-         const filteredImage = await filterImageFromURL(image_url);
-         res.status(200).sendFile(filteredImage, ()=>{
-          deleteLocalFiles([filteredImage])
-         })
        }catch(error){
         res.send(error)
        }
